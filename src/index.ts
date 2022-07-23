@@ -8,13 +8,13 @@ import BN from "bn.js";
 
 
 
-const CONFIG = '6wrYrfryfjd3E523VkNU7cGycx4oF1K7LxK6HwLTYThQ'
+const CONFIG = 'C5gXSr6h5TSKtYCP49WD7jrvQ3kufosRyQNcQa7NxQg2'
 // New admin pubkey is D5hrpHhpp7TAxxzkrm41Jjx463cPaLZV8REze45pKFk7
 const main = async () => {
     const args = process.argv.slice(2);
-    const connection = new Connection("http://127.0.0.1:8899")
-    // const connection = new Connection("https://api.devnet.solana.com")
-    const admin = './keys/new_admin.json'
+    //const connection = new Connection("http://127.0.0.1:8899")
+    const connection = new Connection("https://api.devnet.solana.com")
+    const admin = './keys/admin.json'
     const user = './keys/user.json'
 
     const isAdmin = ['init','approve','deny', 'update_fee', 'new_admin'].includes(args[0])
