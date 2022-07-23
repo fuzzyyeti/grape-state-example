@@ -89,7 +89,8 @@ const main = async () => {
             break;
         case "has_token":
             const {hasToken} = useListingQuery(provider, new PublicKey(CONFIG))
-            console.log('has token', await hasToken(new PublicKey("5zL9T9M6MbMCQ4ZfkH7nwptUhPPCiUfegmjZZq8Gg1YF")))
+            console.log('has token', await hasToken(new PublicKey(args[1])))
+            break;
         case "refund":
             const { requestListingRefund } = useListingRequest(provider, new PublicKey(CONFIG))
             console.log('refund requested', await requestListingRefund(new PublicKey(args[1])))
