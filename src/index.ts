@@ -7,8 +7,8 @@ import {useAdmin, useListingRequest, useListingQuery, useManageAdmin} from 'grap
 import BN from "bn.js";
 
 
-
-const CONFIG = 'C5gXSr6h5TSKtYCP49WD7jrvQ3kufosRyQNcQa7NxQg2'
+const CONFIG = 'AynrW8J4Tgh1hBvizCBuQ9m6KXvuLjGPzJk52o6bVop8'
+//const CONFIG = 'BF9E6X6JCvXNETMZQeaUV1V7EGZ377pmW5S95N4pmpQg'
 // New admin pubkey is D5hrpHhpp7TAxxzkrm41Jjx463cPaLZV8REze45pKFk7
 const main = async () => {
     const args = process.argv.slice(2);
@@ -17,7 +17,7 @@ const main = async () => {
     const admin = './keys/admin.json'
     const user = './keys/user.json'
 
-    const isAdmin = ['init','approve','deny', 'update_fee', 'new_admin'].includes(args[0])
+    const isAdmin = ['init','approve','disable','deny', 'update_fee', 'new_admin'].includes(args[0])
     const keypair = await createKeypairFromFile(isAdmin ? admin : user)
     const wallet = new NodeWallet(keypair)
     const provider = new AnchorProvider(connection, wallet, AnchorProvider.defaultOptions())
@@ -41,10 +41,11 @@ const main = async () => {
         case "request":
             const verifiedCollectionAddress = web3.Keypair.generate().publicKey;
             const updateAuthority = web3.Keypair.generate().publicKey;
-            const { requestListng } = useListingRequest(provider, new PublicKey(CONFIG))
-            const result = await requestListng({
+            const { requestListing } = useListingRequest(provider, new PublicKey(CONFIG))
+            const result = await requestListing!({
                 name: "Loquacious Ladybugs",
                 auction_house: web3.Keypair.generate().publicKey,
+                enabled: true,
                 verified_collection_address: verifiedCollectionAddress!,
                 governance: web3.Keypair.generate().publicKey,
                 collection_update_authority: updateAuthority,
@@ -64,13 +65,21 @@ const main = async () => {
             const deny_result = await denyListing(new PublicKey(args[1]));
             console.log('successfully denied!', deny_result)
             break;
+        case "disable":
+            const {setEnableListing} = useAdmin(provider, new PublicKey(CONFIG))
+            const disable_result = await setEnableListing(new PublicKey(args[1]), false);
+            console.log('successfully disabled!', disable_result)
+            break;
+
         case "list_pending":
             const {getAllPendingListings} = useListingQuery(provider, new PublicKey(CONFIG))
             const pending_listings = await getAllPendingListings();
             console.log('denied')
 
             for (let list of pending_listings) {
-                console.log('verified collection address', list.verified_collection_address!.toBase58(), "update authority", list.collection_update_authority.toBase58())
+                console.log('verified collection address', list.verified_collection_address!.toBase58(),
+                    "update authority", list.collection_update_authority.toBase58(),
+                    "enabled", list.enabled)
             }
             break;
         case "list_approved":
@@ -79,7 +88,9 @@ const main = async () => {
             console.log('approved')
 
             for (let list of listings) {
-                console.log('verified collection address', list.verified_collection_address!.toBase58(), "update authority", list.collection_update_authority.toBase58())
+                console.log('verified collection address', list.verified_collection_address!.toBase58(),
+                    "update authority", list.collection_update_authority.toBase58(),
+                    "enabled", list.enabled)
             }
             break;
         case "is_approved":
@@ -93,7 +104,7 @@ const main = async () => {
             break;
         case "refund":
             const { requestListingRefund } = useListingRequest(provider, new PublicKey(CONFIG))
-            console.log('refund requested', await requestListingRefund(new PublicKey(args[1])))
+            console.log('refund requested', await requestListingRefund!(new PublicKey(args[1])))
             break;
     }
 }
