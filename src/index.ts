@@ -25,18 +25,18 @@ const main = async () => {
     switch (args[0]) {
         case "init":
             const { createConfig } = useManageAdmin(provider);
-            const [tx, account] = await createConfig(new BN(LAMPORTS_PER_SOL))
+            const [tx, account] = await createConfig!(new BN(LAMPORTS_PER_SOL))
             console.log("just created this", account)
             console.log("copy the address to the 'CONFIG' variable if you want to use this config.")
             break;
         case "new_admin":
             const { updateAdmin } = useManageAdmin(provider);
-            console.log("update admin", await updateAdmin(new PublicKey(args[1]), new PublicKey(CONFIG)))
+            console.log("update admin", await updateAdmin!(new PublicKey(args[1]), new PublicKey(CONFIG)))
             console.log("change the 'admin' variable to", args[1])
             break;
         case "update_fee":
             const { updateFee } = useManageAdmin(provider)
-            console.log(`update fee to ${args[1]} lamports`, await updateFee(new BN(parseInt(args[1])), new PublicKey(CONFIG)))
+            console.log(`update fee to ${args[1]} lamports`, await updateFee!(new BN(parseInt(args[1])), new PublicKey(CONFIG)))
             break;
         case "request":
             const verifiedCollectionAddress = web3.Keypair.generate().publicKey;
@@ -51,40 +51,52 @@ const main = async () => {
                 collection_update_authority: updateAuthority,
                 meta_data_url: 'http://whatever.org',
                 vanity_url: 'vanity stuff',
-                token_type: "testtype"
+                token_type: "testtype",
+                listing_requester: provider.publicKey
             })
             console.log("It worked!", "Verified Colleciton Address = ", verifiedCollectionAddress.toBase58(), "Update Authority = ", updateAuthority.toBase58())
             break;
         case "approve":
             const {approveListing} = useAdmin(provider, new PublicKey(CONFIG))
-            const approve_result = await approveListing(new PublicKey(args[1]));
+            const approve_result = await approveListing!(new PublicKey(args[1]));
             console.log('successfully approved!', approve_result)
             break;
         case "deny":
             const {denyListing} = useAdmin(provider, new PublicKey(CONFIG))
-            const deny_result = await denyListing(new PublicKey(args[1]));
+            const deny_result = await denyListing!(new PublicKey(args[1]));
             console.log('successfully denied!', deny_result)
             break;
         case "disable":
             const {setEnableListing} = useAdmin(provider, new PublicKey(CONFIG))
-            const disable_result = await setEnableListing(new PublicKey(args[1]), false);
+            const disable_result = await setEnableListing!(new PublicKey(args[1]), false);
             console.log('successfully disabled!', disable_result)
             break;
 
         case "list_pending":
             const {getAllPendingListings} = useListingQuery(provider, new PublicKey(CONFIG))
-            const pending_listings = await getAllPendingListings();
+            const pending_listings = await getAllPendingListings!();
             console.log('denied')
 
             for (let list of pending_listings) {
                 console.log('verified collection address', list.verified_collection_address!.toBase58(),
                     "update authority", list.collection_update_authority.toBase58(),
-                    "enabled", list.enabled)
+                    "enabled", list.enabled, "requester", list.listing_requester.toBase58())
+            }
+            break;
+        case "list_pending_requestor":
+            const {getAllPendingListingsByRequestor} = useListingQuery(provider, new PublicKey(CONFIG))
+            const pending_listings_by_requestor = await getAllPendingListingsByRequestor!();
+            console.log('denied')
+
+            for (let list of pending_listings_by_requestor) {
+                console.log('verified collection address', list.verified_collection_address!.toBase58(),
+                  "update authority", list.collection_update_authority.toBase58(),
+                  "enabled", list.enabled)
             }
             break;
         case "list_approved":
             const {getAllApprovedListings} = useListingQuery(provider, new PublicKey(CONFIG))
-            const listings = await getAllApprovedListings();
+            const listings = await getAllApprovedListings!();
             console.log('approved')
 
             for (let list of listings) {
@@ -96,16 +108,19 @@ const main = async () => {
         case "is_approved":
             const {isApproved} = useListingQuery(provider, new PublicKey(CONFIG))
 
-            console.log(await isApproved(new PublicKey(args[1])))
+            console.log(await isApproved!(new PublicKey(args[1])))
             break;
         case "has_token":
             const {hasToken} = useListingQuery(provider, new PublicKey(CONFIG))
-            console.log('has token', await hasToken(new PublicKey(args[1])))
+            console.log('has token', await hasToken!(new PublicKey(args[1])))
             break;
         case "refund":
             const { requestListingRefund } = useListingRequest(provider, new PublicKey(CONFIG))
             console.log('refund requested', await requestListingRefund!(new PublicKey(args[1])))
             break;
+        case "is_admin":
+            const {isAdmin} = useAdmin(provider, new PublicKey(CONFIG))
+            console.log(`Is admin = ${await isAdmin!(new PublicKey(args[1]))}`)
     }
 }
 
