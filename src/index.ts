@@ -80,7 +80,8 @@ const main = async () => {
             for (let list of pending_listings) {
                 console.log('verified collection address', list.verified_collection_address!.toBase58(),
                     "update authority", list.collection_update_authority.toBase58(),
-                    "enabled", list.enabled, "requester", list.listing_requester.toBase58())
+                    "enabled", list.enabled, "requester", list.listing_requester.toBase58(),
+                    "metadata", list.meta_data_url)
             }
             break;
         case "list_pending_requestor":
@@ -121,6 +122,9 @@ const main = async () => {
         case "is_admin":
             const {isAdmin} = useAdmin(provider, new PublicKey(CONFIG))
             console.log(`Is admin = ${await isAdmin!(new PublicKey(args[1]))}`)
+        case "update_metadata":
+            const {updateMetadataUrl} = useListingRequest(provider, new PublicKey(CONFIG))
+            console.log(`Update Complete. Tx = ${await updateMetadataUrl!(new PublicKey(args[1]), args[2])}`)
     }
 }
 
