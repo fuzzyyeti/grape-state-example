@@ -7,7 +7,7 @@ import {useAdmin, useListingRequest, useListingQuery, useManageAdmin} from 'grap
 import BN from "bn.js";
 
 
-const CONFIG = 'AynrW8J4Tgh1hBvizCBuQ9m6KXvuLjGPzJk52o6bVop8'
+const CONFIG = 'GjBP4p7p8GNbekJgWLzhowUNXRuAHb2TSiCP8d4G7dvY'
 //const CONFIG = 'BF9E6X6JCvXNETMZQeaUV1V7EGZ377pmW5S95N4pmpQg'
 // New admin pubkey is D5hrpHhpp7TAxxzkrm41Jjx463cPaLZV8REze45pKFk7
 const main = async () => {
@@ -52,7 +52,8 @@ const main = async () => {
                 meta_data_url: 'http://whatever.org',
                 vanity_url: 'vanity stuff',
                 token_type: "testtype",
-                listing_requester: provider.publicKey
+                listing_requester: provider.wallet.publicKey,
+								request_type: 1,
             })
             console.log("It worked!", "Verified Colleciton Address = ", verifiedCollectionAddress.toBase58(), "Update Authority = ", updateAuthority.toBase58())
             break;
