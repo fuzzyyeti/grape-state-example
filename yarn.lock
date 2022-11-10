@@ -518,10 +518,10 @@ get-stream@^6.0.0:
   resolved "https://registry.yarnpkg.com/get-stream/-/get-stream-6.0.1.tgz#a262d8eef67aced57c2852ad6167526a43cbf7b7"
   integrity sha512-ts6Wi+2j3jQjqi70w5AlN8DFnkSwC+MqmxEzdEALB2qXZYV3X/b1CTfgPLGJNMeAWxdPfU8FO1ms3NUfaHCPYg==
 
-grape-art-listing-request@^0.0.26:
-  version "0.0.26"
-  resolved "https://registry.yarnpkg.com/grape-art-listing-request/-/grape-art-listing-request-0.0.26.tgz#7ed2852c3b6cc039200a926fa37cbe7caf880a37"
-  integrity sha512-wRz313p69eSvZkKbLQehmFifeqPOctDzOGklNnRadrcBgGiZfWMh9eGt8B/WLC+IRrh0lkNSZeAbfQ78AWpI3w==
+grape-art-listing-request@^0.0.27:
+  version "0.0.27"
+  resolved "https://registry.yarnpkg.com/grape-art-listing-request/-/grape-art-listing-request-0.0.27.tgz#8bad8dc8398ec92efc912ae969d06233525f19ee"
+  integrity sha512-Qght7/vGVPAm/j6U7XHlX7QvzW7lQypSYVqwyNd6yB1MKF52SUWAs/4apdOOf+zmHGYYRZTf6I5lSQhRHxFd4Q==
   dependencies:
     "@solana/spl-token" "^0.2.0"
     "@solana/web3.js" "^1.47.0"
