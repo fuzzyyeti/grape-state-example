@@ -25,7 +25,7 @@ const main = async () => {
     switch (args[0]) {
         case "init":
             const { createConfig } = useManageAdmin(provider);
-            const [tx, account] = await createConfig!(new BN(LAMPORTS_PER_SOL) * .05)
+            const [tx, account] = await createConfig!((new BN(LAMPORTS_PER_SOL)).mul(new BN(0.05)))
             console.log("just created this", account)
             console.log("copy the address to the 'CONFIG' variable if you want to use this config.")
             break;
