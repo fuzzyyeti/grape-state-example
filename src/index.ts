@@ -6,16 +6,24 @@ import { createKeypairFromFile } from './utils'
 import {useAdmin, useListingRequest, useListingQuery, useManageAdmin} from 'grape-art-listing-request'
 import BN from "bn.js";
 
+/*
+SET FEE to 1SOL:
+yarn dev update_fee 1000000000
+*/
 
-const CONFIG = 'GjBP4p7p8GNbekJgWLzhowUNXRuAHb2TSiCP8d4G7dvY'
+const CONFIG = 'AuVdD2xbXitcQd7Q82uoi1BpHrBzRu3ECDCusvNTkb1w'
 //const CONFIG = 'BF9E6X6JCvXNETMZQeaUV1V7EGZ377pmW5S95N4pmpQg'
 // New admin pubkey is D5hrpHhpp7TAxxzkrm41Jjx463cPaLZV8REze45pKFk7
 const main = async () => {
     const args = process.argv.slice(2);
     //const connection = new Connection("http://127.0.0.1:8899")
-    const connection = new Connection("https://api.devnet.solana.com")
-    const admin = './keys/admin.json'
-    const user = './keys/user.json'
+    //const connection = new Connection("https://api.devnet.solana.com")
+    const connection = new Connection("https://api.mainnet-beta.solana.com")
+    
+    //const admin = './keys/admin.json'
+    //const user = './keys/admin.json'
+    const admin = '/Users/kirk/.config/solana/arttoNmRD3m9p1XihPeLMFmwYdiEHv6Rj9Jw8P1YXtZ.json'
+    const user = '/Users/kirk/.config/solana/user.json'
 
     const isAdmin = ['init','approve','disable','deny', 'update_fee', 'new_admin'].includes(args[0])
     const keypair = await createKeypairFromFile(isAdmin ? admin : user)
